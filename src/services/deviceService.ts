@@ -64,32 +64,32 @@ export class DeviceService {
     }
 
     private saveRegistry(registryObj:RegistryObject) : Promise<boolean> {
-        let path = this._datapath;
-        return new Promise(function(resolve,reject){
-           fs.writeFile(path + process.env.app_regFileName,JSON.stringify(registryObj.data), function(err){
-				      if (err) {
-				        return reject(false);
-			        }
-              resolve(true);      			    
+        let path = this._datapath  + process.env.app_regFileName; 
+        return new Promise((resolve,reject) => {
+           fs.writeFile(path,JSON.stringify(registryObj.data), (err) => {
+				    if (err) {
+				       reject(false);
+			        } else {
+                       resolve(true); 
+                    }		    
 		      });
        });
     }
 
     private readRegistry() : Promise<RegistryObject> {
-        let path = this._datapath; 
+        let path = this._datapath  + process.env.app_regFileName; 
         let registry = new RegistryObject();
         
-        return new Promise(function(resolve, reject){
-          fs.readFile(path + process.env.app_regFileName, 
-                function(err,data){
-                    
+        return new Promise((resolve, reject) => {
+          fs.readFile(path, (err,data) => {
 				    if (err) {
                         registry.error = err;
-				        return resolve(registry);
-			        }
-                    registry.status = 'Ok';
-			        registry.data =  JSON.parse(data.toString());
-              resolve(registry);      			    
+				        resolve(registry);
+			        } else {
+                        registry.status = 'Ok';
+			            registry.data =  JSON.parse(data.toString());
+                        resolve(registry);  
+                    }		    
 		      });
        });    
     }
