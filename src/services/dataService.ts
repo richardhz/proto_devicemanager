@@ -25,20 +25,19 @@ export class DataService {
     }
 
     private StoreFile(data:DataPacket): Promise<StoreData> {
-        let path = this._datapath; 
-        //reject not yet handled.
-        //probably a better way to impliment this Promise
-        return new Promise(function(resolve, reject){
-          fs.writeFile(path + data.job + '.txt',JSON.stringify(data), function(err){
-				      if (err) {
-				        return reject(err);
-			        }
-            let sdata : StoreData = {        
-              status : 'Ok',
-			  data :  data.deviceId
-            }
-            
-            resolve(sdata);      			    
+        let path = this._datapath + data.job + '.txt';
+        
+        return new Promise((resolve, reject) => {
+           fs.writeFile(path ,JSON.stringify(data), (err) => {
+	            if (err) {
+				    reject(err);
+			    } else {
+                    let sdata : StoreData = {        
+                                status : 'Ok',
+			                      data :  data.deviceId
+                    }
+                    resolve(sdata); 
+                } 			    
 		    });
        });    
     }
