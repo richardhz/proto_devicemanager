@@ -7,12 +7,10 @@ export class DataService {
 
     constructor(dataPath:string) {
         this._datapath = dataPath;
-        
         this.deviceService = new DeviceService(this._datapath);
     }
 
     public async Store(data:DataPacket) {
-        //We need to check if the device is registed
         var isRegistered = await this.deviceService.isRegistered(data.deviceId);
         let res : StoreData; 
         if(isRegistered){
